@@ -19,6 +19,10 @@ h1 {
   text-shadow: 0 -2px 3px #111, 0 3px 4px #666;
 }
 
+h2 {
+  padding-left: 35px;
+}
+
 select {
   margin-right: 1em;
 }
@@ -31,7 +35,7 @@ body > div > div:first-child {
 }
 
 body > div > div:last-child {
-  padding: 35px;
+  padding: 0 35px 10px;
 }
 
 body > div > div:last-child > div {

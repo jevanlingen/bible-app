@@ -6359,6 +6359,7 @@ var $author$project$Bible$getChapters = function (book) {
 		A2($y0hy0h$ordered_containers$OrderedDict$get, book, $author$project$Bible$data));
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
@@ -6453,6 +6454,14 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text('The Bible')
+					])),
+				A2(
+				$elm$html$Html$h2,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						model.book + (' ' + $elm$core$String$fromInt(model.chapter)))
 					])),
 				$author$project$Main$viewScripture(model.data)
 			]));
