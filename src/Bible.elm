@@ -91,6 +91,11 @@ getChapters book =
 loadScripture : String -> Int -> Cmd Msg
 loadScripture book chapter =
   Http.get
-    { url = "https://bible-api.com/" ++ book ++ String.fromInt chapter ++ "?verse_numbers=true"
+    { url = "https://bible-api.com/" ++ book ++ String.fromInt chapter ++ fixApi book ++ "?verse_numbers=true"
     , expect = Http.expectJson ScriptureChanged (field "text" string)
     }
+
+{- See: https://github.com/seven1m/bible_api/issues/25 -}
+fixApi : String -> String
+fixApi book =
+  if book == "Jude" then "-25" else ""
