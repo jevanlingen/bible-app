@@ -5938,6 +5938,9 @@ var $elm$http$Http$expectJson = F2(
 				}));
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
+var $author$project$Bible$fixApi = function (book) {
+	return (book === 'Jude') ? '-25' : '';
+};
 var $elm$http$Http$emptyBody = _Http_emptyBody;
 var $elm$http$Http$Request = function (a) {
 	return {$: 'Request', a: a};
@@ -6120,7 +6123,7 @@ var $author$project$Bible$loadScripture = F2(
 					$elm$http$Http$expectJson,
 					$author$project$Types$ScriptureChanged,
 					A2($elm$json$Json$Decode$field, 'text', $elm$json$Json$Decode$string)),
-				url: 'https://bible-api.com/' + (book + ($elm$core$String$fromInt(chapter) + '?verse_numbers=true'))
+				url: 'https://bible-api.com/' + (book + ($elm$core$String$fromInt(chapter) + ($author$project$Bible$fixApi(book) + '?verse_numbers=true')))
 			});
 	});
 var $author$project$Main$init = function (_v0) {
