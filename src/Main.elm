@@ -50,13 +50,15 @@ view : Model -> Html Msg
 view model =
   div []
     [
-    div [] [
-      select [ onInput ChangeBook ] (createBooks Bible.getBooks)
-      , select [ value (String.fromInt model.chapter), onInput ChangeChapter ] (createChapters (Bible.getChapters model.book))
-    ]
-    , h1 [] [ text "The Bible"]
-    , h2 [] [ text (model.book ++ " " ++ String.fromInt model.chapter)]
-    , viewScripture model.data
+      div [] [
+        div [] [
+          select [ onInput ChangeBook ] (createBooks Bible.getBooks)
+          , select [ value (String.fromInt model.chapter), onInput ChangeChapter ] (createChapters (Bible.getChapters model.book))
+        ]
+      ]
+      , h1 [] [ text "The Bible"]
+      , h2 [] [ text (model.book ++ " " ++ String.fromInt model.chapter)]
+      , viewScripture model.data
     ]
 
 viewScripture: Call -> Html Msg

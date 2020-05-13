@@ -6435,22 +6435,28 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						A2(
-						$elm$html$Html$select,
+						$elm$html$Html$div,
+						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onInput($author$project$Types$ChangeBook)
-							]),
-						$author$project$Main$createBooks($author$project$Bible$getBooks)),
-						A2(
-						$elm$html$Html$select,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$value(
-								$elm$core$String$fromInt(model.chapter)),
-								$elm$html$Html$Events$onInput($author$project$Types$ChangeChapter)
-							]),
-						$author$project$Main$createChapters(
-							$author$project$Bible$getChapters(model.book)))
+								A2(
+								$elm$html$Html$select,
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onInput($author$project$Types$ChangeBook)
+									]),
+								$author$project$Main$createBooks($author$project$Bible$getBooks)),
+								A2(
+								$elm$html$Html$select,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$value(
+										$elm$core$String$fromInt(model.chapter)),
+										$elm$html$Html$Events$onInput($author$project$Types$ChangeChapter)
+									]),
+								$author$project$Main$createChapters(
+									$author$project$Bible$getChapters(model.book)))
+							]))
 					])),
 				A2(
 				$elm$html$Html$h1,
