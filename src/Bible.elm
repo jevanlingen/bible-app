@@ -1,12 +1,11 @@
-module Bible exposing (getBooks, getChapters)
-{- module Bible exposing (getBooks, getChapters, getScripture) -}
+module Bible exposing (getBooks, getChapters, loadScripture)
 
-import OrderedDict
+import OrderedDict exposing (OrderedDict)
 import Http
+import Types exposing (..)
 import Json.Decode exposing (field, string)
 
---type Msg = ScriptureChanged (Result Http.Error String)
-
+data : OrderedDict String Int
 data = OrderedDict.fromList
   [
     -- Old Testament
@@ -89,11 +88,9 @@ getChapters book =
   |> OrderedDict.get book
   |> Maybe.withDefault 1
 
-{- Can't get to to work yet :(
-
-getScripture : String -> Int -> a -> Cmd a
-getScripture book chapter callback =
+loadScripture : String -> Int -> Cmd Msg
+loadScripture book chapter =
   Http.get
     { url = "https://bible-api.com/" ++ book ++ String.fromInt chapter ++ "?verse_numbers=true"
-    , expect = Http.expectJson callback (field "text" string)
-    } -}
+    , expect = Http.expectJson ScriptureChanged (field "text" string)
+    }

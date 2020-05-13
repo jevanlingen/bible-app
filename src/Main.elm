@@ -4,9 +4,8 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
-import Http
-import Json.Decode exposing (field, string)
 import Bible
+import Types exposing (..)
 
 main =
   Browser.element
@@ -18,45 +17,26 @@ main =
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  let model = { book = "Genesis", chapter = 1, data = Loading } in ( model, getScripture model )
-
--- TYPES
-type ScriptureText
-  = Loading
-  | Success String
-  | Failure
-
-type Msg
-  = ChangeBook String
-  | ChangeChapter String
-  | ScriptureChanged (Result Http.Error String)
+  let model = { book = "Genesis", chapter = 1, data = Loading } in ( model, Bible.loadScripture model.book model.chapter )
 
 -- ALIASES
 type alias Model =
   { 
     book : String,
     chapter: Int,
-    data: ScriptureText
+    data: Call
    }
-
--- ACTIONS
-getScripture : Model -> Cmd Msg
-getScripture model =
-  Http.get
-    { url = "https://bible-api.com/" ++ model.book ++ String.fromInt model.chapter ++ "?verse_numbers=true"
-    , expect = Http.expectJson ScriptureChanged (field "text" string)
-    }
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     ChangeBook book ->
        let newModel = { model | book = book, chapter = 1, data = Loading } in
-      (newModel, getScripture newModel)
+      (newModel, Bible.loadScripture newModel.book newModel.chapter)
 
     ChangeChapter chapter ->
       let newModel = { model | chapter = Maybe.withDefault 1 (String.toInt chapter), data = Loading } in
-      (newModel, getScripture newModel)
+      (newModel, Bible.loadScripture newModel.book newModel.chapter)
     
     ScriptureChanged result ->
       case result of
@@ -80,16 +60,16 @@ view model =
     , viewScripture model.data
     ]
 
-viewScripture: ScriptureText -> Html Msg
+viewScripture: Types.Call -> Html Msg
 viewScripture scripture =
   case scripture of
-    Failure ->
+    Types.Failure ->
       createDiv "Sorry something did go wrong. Text could not be loaded."
 
-    Loading ->
+    Types.Loading ->
       createDiv "Loading..."
 
-    Success data ->
+    Types.Success data ->
       div [] (List.map createDiv (String.split "\n" data))
 
 createBooks : List String -> List (Html Msg)

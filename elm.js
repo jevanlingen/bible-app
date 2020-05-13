@@ -5319,8 +5319,8 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$Loading = {$: 'Loading'};
-var $author$project$Main$ScriptureChanged = function (a) {
+var $author$project$Types$Loading = {$: 'Loading'};
+var $author$project$Types$ScriptureChanged = function (a) {
 	return {$: 'ScriptureChanged', a: a};
 };
 var $elm$json$Json$Decode$decodeString = _Json_runOnString;
@@ -6112,26 +6112,27 @@ var $elm$http$Http$get = function (r) {
 		{body: $elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: $elm$core$Maybe$Nothing, tracker: $elm$core$Maybe$Nothing, url: r.url});
 };
 var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$Main$getScripture = function (model) {
-	return $elm$http$Http$get(
-		{
-			expect: A2(
-				$elm$http$Http$expectJson,
-				$author$project$Main$ScriptureChanged,
-				A2($elm$json$Json$Decode$field, 'text', $elm$json$Json$Decode$string)),
-			url: 'https://bible-api.com/' + (model.book + ($elm$core$String$fromInt(model.chapter) + '?verse_numbers=true'))
-		});
-};
+var $author$project$Bible$loadScripture = F2(
+	function (book, chapter) {
+		return $elm$http$Http$get(
+			{
+				expect: A2(
+					$elm$http$Http$expectJson,
+					$author$project$Types$ScriptureChanged,
+					A2($elm$json$Json$Decode$field, 'text', $elm$json$Json$Decode$string)),
+				url: 'https://bible-api.com/' + (book + ($elm$core$String$fromInt(chapter) + '?verse_numbers=true'))
+			});
+	});
 var $author$project$Main$init = function (_v0) {
-	var model = {book: 'Genesis', chapter: 1, data: $author$project$Main$Loading};
+	var model = {book: 'Genesis', chapter: 1, data: $author$project$Types$Loading};
 	return _Utils_Tuple2(
 		model,
-		$author$project$Main$getScripture(model));
+		A2($author$project$Bible$loadScripture, model.book, model.chapter));
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $author$project$Main$Failure = {$: 'Failure'};
-var $author$project$Main$Success = function (a) {
+var $author$project$Types$Failure = {$: 'Failure'};
+var $author$project$Types$Success = function (a) {
 	return {$: 'Success', a: a};
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
@@ -6152,10 +6153,10 @@ var $author$project$Main$update = F2(
 				var book = msg.a;
 				var newModel = _Utils_update(
 					model,
-					{book: book, chapter: 1, data: $author$project$Main$Loading});
+					{book: book, chapter: 1, data: $author$project$Types$Loading});
 				return _Utils_Tuple2(
 					newModel,
-					$author$project$Main$getScripture(newModel));
+					A2($author$project$Bible$loadScripture, newModel.book, newModel.chapter));
 			case 'ChangeChapter':
 				var chapter = msg.a;
 				var newModel = _Utils_update(
@@ -6165,11 +6166,11 @@ var $author$project$Main$update = F2(
 							$elm$core$Maybe$withDefault,
 							1,
 							$elm$core$String$toInt(chapter)),
-						data: $author$project$Main$Loading
+						data: $author$project$Types$Loading
 					});
 				return _Utils_Tuple2(
 					newModel,
-					$author$project$Main$getScripture(newModel));
+					A2($author$project$Bible$loadScripture, newModel.book, newModel.chapter));
 			default:
 				var result = msg.a;
 				if (result.$ === 'Ok') {
@@ -6178,22 +6179,22 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								data: $author$project$Main$Success(text)
+								data: $author$project$Types$Success(text)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{data: $author$project$Main$Failure}),
+							{data: $author$project$Types$Failure}),
 						$elm$core$Platform$Cmd$none);
 				}
 		}
 	});
-var $author$project$Main$ChangeBook = function (a) {
+var $author$project$Types$ChangeBook = function (a) {
 	return {$: 'ChangeBook', a: a};
 };
-var $author$project$Main$ChangeChapter = function (a) {
+var $author$project$Types$ChangeChapter = function (a) {
 	return {$: 'ChangeChapter', a: a};
 };
 var $elm$html$Html$option = _VirtualDom_node('option');
@@ -6434,7 +6435,7 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$select,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onInput($author$project$Main$ChangeBook)
+								$elm$html$Html$Events$onInput($author$project$Types$ChangeBook)
 							]),
 						$author$project$Main$createBooks($author$project$Bible$getBooks)),
 						A2(
@@ -6443,7 +6444,7 @@ var $author$project$Main$view = function (model) {
 							[
 								$elm$html$Html$Attributes$value(
 								$elm$core$String$fromInt(model.chapter)),
-								$elm$html$Html$Events$onInput($author$project$Main$ChangeChapter)
+								$elm$html$Html$Events$onInput($author$project$Types$ChangeChapter)
 							]),
 						$author$project$Main$createChapters(
 							$author$project$Bible$getChapters(model.book)))
