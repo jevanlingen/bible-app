@@ -31,7 +31,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     ChangeBook book ->
-       let newModel = { model | book = book, chapter = 1, data = Loading } in
+      let newModel = { model | book = book, chapter = 1, data = Loading } in
       (newModel, Bible.loadScripture newModel.book newModel.chapter)
 
     ChangeChapter chapter ->
@@ -59,16 +59,16 @@ view model =
     , viewScripture model.data
     ]
 
-viewScripture: Types.Call -> Html Msg
+viewScripture: Call -> Html Msg
 viewScripture scripture =
   case scripture of
-    Types.Failure ->
+    Failure ->
       createDiv "Sorry something did go wrong. Text could not be loaded."
 
-    Types.Loading ->
+    Loading ->
       createDiv "Loading..."
 
-    Types.Success data ->
+    Success data ->
       div [] (List.map createDiv (String.split "\n" data))
 
 createBooks : List String -> List (Html Msg)
