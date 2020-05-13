@@ -17,9 +17,9 @@ main =
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  let model = { book = "Genesis", chapter = 1, data = Loading } in ( model, Bible.loadScripture model.book model.chapter )
+  let model = { book = "Genesis", chapter = 1, data = Loading } in
+  ( model, Bible.loadScripture model.book model.chapter )
 
--- ALIASES
 type alias Model =
   { 
     book : String,
@@ -46,7 +46,6 @@ update msg model =
         Err _ ->
           ({ model | data = Failure }, Cmd.none)
 
--- VIEW
 view : Model -> Html Msg
 view model =
   div []
